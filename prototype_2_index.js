@@ -74,13 +74,7 @@ const data = d3.json(url)
     var height = svg.attr("height");
     let r = 25
 
-    // const radius = width;
-    // for (let node of graph[0].nodes) {
-    //     node.x = 0;
-    //     node.y = 0;
-    // }
-
-    var simulation = d3
+  var simulation = d3
     .forceSimulation(graph[0].nodes) 
     .force("link",d3.forceLink().id(function(d) {return d.id;}).links(graph[1].links).strength(2))
     .force("charge", d3.forceManyBody().strength(-3000))
@@ -181,21 +175,13 @@ async function graphYet(){
     console.log("Loaded")
   }
 }
-  if (requestCounter > 0){
-    //console.log("wait", requestCounter)
-  }
-
-
-
+  if (requestCounter > 0){}
 
 getData()
 
-
-
-
 console.log("Loading")
-  //.then(console.log(graph))
 })
+
 .catch(err => console.log(err))
 
 
