@@ -1,0 +1,80 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="uft-8">
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="X-UA-Compatible" content= "ie=edge">
+  <style>
+  h1{
+    font-size:24px; 
+    font: arial;
+    margin: 10px;
+  }
+  #legend p{
+    float:;
+  }
+    #sourceword{
+      color: grey;
+      float: left;
+      margin: 10px;
+    }
+    #noun{
+      color: red;
+      float: left;
+      margin: 10px;
+    }
+    #verb{
+      color: green;
+      float: left;
+      margin: 10px;
+    }
+    #adjective{
+      color: blue;
+      float: left;
+      margin: 10px;
+    }
+    #adjectivesattelite{
+      color:orange;
+      float: left;
+      margin: 10px;
+    }
+    #adverb{
+      color: purple;
+      float: left;
+      margin: 10px;
+    }
+  </style>
+  <title></title>
+    <h1 id="legend" width ="270">
+    Visualizing WordNet:  <br>
+      <p id = "sourceword"> Source Lemma: Grey </p>
+      <p id = "noun"> Nouns: Red </p>
+      <p id = "verb"> Verbs: Green </p>
+      <p id = "adjective"> Adjectives: Blue </p> 
+      <p id = "adjectivesattelite"> Adjective Sattelites: Orange </p>  
+      <p id="adverb"> Adverbs: purple </p>
+    </h1> 
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+ 
+  <svg id="NetworkGraph" width="2000" height="2000"></svg>
+</head>
+
+<style>
+  .links line {
+    stroke: #999;
+    stroke-opacity: 0.6;
+  }
+
+  .nodes circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+  }
+</style>
+<body>
+    <script src="prototype_2_index_stable.js"></script>
+</body>
+
+
+
+
+</html> 
