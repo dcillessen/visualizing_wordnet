@@ -2,7 +2,7 @@ let graph = []
 let newNodes = []
 let matches = []
 let uniqueNodes = []
-const url = "https://en-word.net/json/lemma/pound"
+const url = "https://en-word.net/json/lemma/cat"
 let requestCounter = 0
 
 const data = d3.json(url)
@@ -58,7 +58,12 @@ const data = d3.json(url)
 
    function findMatch(){
     // search through nodes for repeats, place each individual node (avoiding repeats) in a new array
-    // if a node appears more than once, it is assigned value "match"
+    // if an node object appears more than once, it is assigned value "match"
+    // if a node object has the "match" value, it is placed into an array caled
+    function onlyUnique(value, index, self) { 
+      return self.indexOf(value) === index;
+    }
+
     for (let i = 0; i < (graph[0].nodes.length); i++){
       let term = graph[0].nodes[i].id
       let matchCount = 0
@@ -77,39 +82,36 @@ const data = d3.json(url)
         }
       }
     }
-    uniqueNodelist()
-  }
-
-  function uniqueNodelist(){
-    //add non-matched nodes
-  for (let i = 0; i < (graph[0].nodes.length); i++){
-    if (graph[0].nodes[i].match === "null"){
-      newNodes.push(graph[0].nodes[i])
+    // place all objects with "null" in the "match" value into a new array called newNodes
+    for (let i = 0; i < (graph[0].nodes.length); i++){
+      if (graph[0].nodes[i].match === "null"){
+        newNodes.push(graph[0].nodes[i])
+      }
     }
-  }
-    //add matched nodes - right now doesn't filter out matched nodes which do not appear adjacently in the data. maybe there is a way to sort the data along id (placing all like terms next to eachother) before calling this function? 
-  for (let i = 0; i < (matches.length); i++){
-    let matchCount = 0
-    let term = matches[i]
-    for (let j = 0; j < (matches.length); j++){
-      if (i = j){matchCount = matchCount + 1}
-      if (matchCount > 1){
-        if (term = matches[j]){
-          //console.log("match", term.id, matches[j].id)
-          newNodes.push(matches[j])
-          console.log(matches[j])
+
+    // review the "matches" array by sorting out each unique synset ID found within it into a new array called "uniqueMatchIDs"
+    let matchID = []
+    let uniqueMatchIDs = []
+    for (let i = 0; i < (matches.length); i++){
+      matchID.push(matches[i].id)
+    }
+    uniqueMatchIDs = matchID.filter( onlyUnique )
+
+    //add each unique matched node to "newNodes" - this method takes the object from "matches" which has the same ID and adds it to "newNodes".  
+    //The second for loop adds the same object as many times as it appears, but always with the same index value
+    for (let i = 0; i < (uniqueMatchIDs.length); i++){
+      let term1 = uniqueMatchIDs[i]
+      for (let j = 0; j < matches.length; j++){
+        if (term1 === matches[j].id){
+        newNodes.push(matches[j])
         }
       }
     }
+
+    // filter out any remaining non-unique node objects (based on indexing)
+    uniqueNodes = newNodes.filter( onlyUnique )
+    graphData()
   }
-  function onlyUnique(value, index, self) { 
-    return self.indexOf(value) === index;
-  }
-  uniqueNodes = newNodes.filter( onlyUnique )
-  console.log(uniqueNodes)
-  console.log(newNodes)
-  graphData()
-}
 
   function graphData(){
     function boxingForce() {
@@ -123,7 +125,7 @@ const data = d3.json(url)
     const domain = [`${url}`, "n", "v", "a", "s", "r"]
     const range =  ["grey", "red", "green", "blue", "orange", "purple"]
     var color = d3.scaleOrdinal().domain(domain).range(range);
-    var svg = d3.select("svg");
+    var svg = d3.select("svg")
     var width = svg.attr("width");
     var height = svg.attr("height");
     let r = 25
@@ -135,7 +137,7 @@ const data = d3.json(url)
     .force("collide", d3.forceCollide().strength(-1).radius(r))
     .force("center", d3.forceCenter(width / 2, height / 2))
     .force("bounds", boxingForce)
-    .on("tick", ticked);
+    .on("tick", ticked); // call this a few hundred times before calling the links and nodes 
 
   var link = svg
     .append("g")
